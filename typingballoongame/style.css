@@ -1,0 +1,60 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+}
+
+#game-container {
+    position: relative;
+    width: 400px;
+    height: 600px;
+    margin: auto;
+    border: 2px solid black;
+    overflow: hidden;
+    background-color: skyblue;
+}
+
+.balloon {
+    position: absolute;
+    font-size: 44px;
+    color: red;
+}
+
+
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 20px 40px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, transform 0.3s ease-in-out, box-shadow 0.3s ease;
+    margin: 15px;
+    width: 220px;
+    max-width: 90%;
+    display: inline-block;
+}
+
+button:hover {
+    background-color: #45a049;
+    transform: scale(1.05); /* Enlarges the button slightly on hover */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* More noticeable shadow */
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3); /* Focus ring with subtle glow */
+}
+
+button:active {
+    transform: scale(0.98); /* Shrinks slightly when clicked */
+}
+
+button:disabled {
+    background-color: #d3d3d3; /* Grey color for disabled state */
+    cursor: not-allowed;
+    box-shadow: none;
+}
