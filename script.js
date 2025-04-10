@@ -1,8 +1,9 @@
-const words = ['あ', 'い', 'う', 'え', 'お', 'か', 'き', 'く', 'け', 'こ', 
-                'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と', 
-                'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ',
-                'ま', 'み', 'む', 'め', 'も', 'や', 'ゆ', 'よ', 'ら', 'り', 
-                'る', 'れ', 'ろ', 'わ', 'を', 'ん', 'ア', 'イ', 'ウ', 'エ', 'オ', 'カ', 'キ', 'ク', 'ケ', 'コ', 'サ', 'シ', 'ス', 'セ', 'ソ', 'タ', 'チ', 'ツ', 'テ', 'ト', 'ナ', 'ニ', 'ヌ', 'ネ', 'ノ', 'ハ', 'ヒ', 'フ', 'ヘ', 'ホ','マ', 'ミ', 'ム', 'メ', 'モ', 'ヤ', 'ユ', 'ヨ', 'ラ', 'リ', 'ル', 'レ', 'ロ', 'ワ', 'ヲ', 'ン'];
+const basicWords = ['あ', 'い', 'う', 'え', 'お'];
+const secondWords = ['か', 'き', 'く', 'け', 'こ', 
+    'さ', 'し', 'す', 'せ', 'そ', 'た', 'ち', 'つ', 'て', 'と', 
+    'な', 'に', 'ぬ', 'ね', 'の', 'は', 'ひ', 'ふ', 'へ', 'ほ',
+    'ま', 'み', 'む', 'め', 'も', 'や', 'ゆ', 'よ', 'ら', 'り', 
+    'る', 'れ', 'ろ', 'わ', 'を', 'ん'];
 const advancedWords = ['が', 'ぎ', 'ぐ', 'げ', 'ご', 'ざ', 'じ', 'ず', 'ぜ', 'ぞ',
                        'だ', 'ぢ', 'づ', 'で', 'ど', 'ば', 'び', 'ぶ', 'べ', 'ぼ',
                        'ぱ', 'ぴ', 'ぷ', 'ぺ', 'ぽ', 'キャ', 'キュ', 'キョ',
@@ -15,6 +16,9 @@ const todofukenWords = ['北海道', '青森', '岩手', '宮城', '秋田', '�
                         '鳥取', '島根', '岡山', '広島', '山口', '徳島', '香川', '愛媛', '高知',
                         '福岡', '佐賀', '長崎', '熊本', '大分', '宮崎', '鹿児島', '沖縄'];
 let useTodofuken = false;
+let completedWords = new Set();
+let currentWordList = [...basicWords];
+let wordStage = 'basic'; // 'basic', 'second', 'advanced', 'done'
 const romajiMap = {
     'あ': ['a'], 'い': ['i'], 'う': ['u'], 'え': ['e'], 'お': ['o'],
     'か': ['ka'], 'き': ['ki'], 'く': ['ku'], 'け': ['ke'], 'こ': ['ko'],
@@ -106,11 +110,33 @@ function createBalloon() {
 
     let randomWord;
     if (useTodofuken) {
-        randomWord = todofukenWords[Math.floor(Math.random() * todofukenWords.length)];
+        let availableWords = todofukenWords.filter(word => !completedWords.has(word));
+        if (availableWords.length === 0) {
+            alert("都道府県モードをクリアしました！おめでとう！");
+            paused = true;
+            return;
+        }
+        randomWord = availableWords[Math.floor(Math.random() * availableWords.length)];
     } else {
-        randomWord = elapsedTime > 20 && Math.random() < 0.3 
-                     ? advancedWords[Math.floor(Math.random() * advancedWords.length)]
-                     : words[Math.floor(Math.random() * words.length)];
+        let availableWords = currentWordList.filter(word => !completedWords.has(word));
+        if (availableWords.length === 0) {
+            if (wordStage === 'basic') {
+                currentWordList = [...secondWords];
+                wordStage = 'second';
+                completedWords.clear();
+            } else if (wordStage === 'second') {
+                currentWordList = [...advancedWords];
+                wordStage = 'advanced';
+                completedWords.clear();
+            } else if (wordStage === 'advanced') {
+                wordStage = 'done';
+                alert("すべての単語を完成しました！おめでとう！次のステージへ。　〜　都道府県ステージ　又は　上級・中級ステージ");
+                paused = true;
+                return;
+            }
+            availableWords = currentWordList.filter(word => !completedWords.has(word));
+        }
+        randomWord = availableWords[Math.floor(Math.random() * availableWords.length)];
     }
 
     balloon.textContent = randomWord;
@@ -194,6 +220,7 @@ document.addEventListener('keydown', (event) => {
                     }, 200);
 
                     score++;
+                    completedWords.add(balloon.text);
                     document.getElementById('score').textContent = score;
                 }
             } else {
@@ -206,6 +233,9 @@ document.addEventListener('keydown', (event) => {
 function startTodofukenGame() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('game-screen').style.display = 'block';
+    currentWordList = [...todofukenWords];
+    wordStage = 'todofuken';
+    completedWords.clear();
     restartGame();
     elapsedTime = 0;
     timerElement.textContent = elapsedTime;
@@ -228,6 +258,9 @@ function restartGame() {
     currentInput = '';
     paused = false; // Reset pause state
     elapsedTime = 0; // Reset timer to zero
+    completedWords.clear();
+    currentWordList = [...basicWords];
+    wordStage = 'basic';
     document.getElementById('score').textContent = score;
     document.getElementById('lives').textContent = lives;
     startTimer(); // Restart the timer
