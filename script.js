@@ -9,6 +9,12 @@ const advancedWords = ['が', 'ぎ', 'ぐ', 'げ', 'ご', 'ざ', 'じ', 'ず', '
                        'シャ', 'シュ', 'ショ', 'チャ', 'チュ', 'チョ',
                        'ニャ', 'ニュ', 'ニョ', 'ヒャ', 'ヒュ', 'ヒョ',
                        'ミャ', 'ミュ', 'ミョ', 'リャ', 'リュ', 'リョ'];
+const todofukenWords = ['北海道', '青森', '岩手', '宮城', '秋田', '山形', '福島', '茨城', '栃木', '群馬',
+                        '埼玉', '千葉', '東京', '神奈川', '新潟', '富山', '石川', '福井', '山梨', '長野',
+                        '岐阜', '静岡', '愛知', '三重', '滋賀', '京都', '大阪', '兵庫', '奈良', '和歌山',
+                        '鳥取', '島根', '岡山', '広島', '山口', '徳島', '香川', '愛媛', '高知',
+                        '福岡', '佐賀', '長崎', '熊本', '大分', '宮崎', '鹿児島', '沖縄'];
+let useTodofuken = false;
 const romajiMap = {
     'あ': ['a'], 'い': ['i'], 'う': ['u'], 'え': ['e'], 'お': ['o'],
     'か': ['ka'], 'き': ['ki'], 'く': ['ku'], 'け': ['ke'], 'こ': ['ko'],
@@ -43,6 +49,20 @@ const romajiMap = {
     'ミャ': ['mya'], 'ミュ': ['myu'], 'ミョ': ['myo'],
     'リャ': ['rya'], 'リュ': ['ryu'], 'リョ': ['ryo']
 };
+const todofukenRomajiMap = {
+    '北海道': ['hokkaidou',], '青森': ['aomori'], '岩手': ['iwate'], '宮城': ['miyagi'],
+    '秋田': ['akita'], '山形': ['yamagata'], '福島': ['fukushima'], '茨城': ['ibaraki'],
+    '栃木': ['tochigi'], '群馬': ['gunma','gunnma'], '埼玉': ['saitama'], '千葉': ['chiba','tiba'],
+    '東京': ['toukyou'], '神奈川': ['kanagawa'], '新潟': ['niigata'], '富山': ['toyama'],
+    '石川': ['ishikawa'], '福井': ['fukui'], '山梨': ['yamanashi','yamanasi'], '長野': ['nagano'],
+    '岐阜': ['gifu'], '静岡': ['shizuoka'], '愛知': ['aichi','aiti'], '三重': ['mie'],
+    '滋賀': ['shiga'], '京都': ['kyouto'], '大阪': ['oosaka'], '兵庫': ['hyougo'],
+    '奈良': ['nara'], '和歌山': ['wakayama'], '鳥取': ['tottori'], '島根': ['shimane'],
+    '岡山': ['okayama'], '広島': ['hiroshima'], '山口': ['yamaguchi'], '徳島': ['tokushima'],
+    '香川': ['kagawa'], '愛媛': ['ehime'], '高知': ['kouchi','kouti'], '福岡': ['fukuoka'],
+    '佐賀': ['saga'], '長崎': ['nagasaki'], '熊本': ['kumamoto'], '大分': ['ooita'],
+    '宮崎': ['miyazaki'], '鹿児島': ['kagoshima'], '沖縄': ['okinawa']
+};
 let score = 0;
 let lives = 3;
 let activeBalloons = [];
@@ -56,7 +76,9 @@ let balloonSpawnInterval = 2000;
 
 function startTimer() {
     clearInterval(timerInterval); // Clear any existing timer
-    elapsedTime = 0;
+    if (!paused) {
+        elapsedTime = elapsedTime || 0;
+    }
     timerElement.textContent = elapsedTime;
     
     timerInterval = setInterval(() => {
@@ -72,7 +94,7 @@ function startTimer() {
 }
 
 function endGame() {
-    alert("ゲーム終了！スコア: " + score);
+    alert("ゲーム終了！スコア: " + score + "もう一度挑戦してこのスコアを追い抜こう");
     restartGame();
 }
 
@@ -82,10 +104,14 @@ function createBalloon() {
     let balloon = document.createElement('div');
     balloon.classList.add('balloon');
 
-    // Introduce harder words as time progresses
-    let randomWord = elapsedTime > 20 && Math.random() < 0.3 
+    let randomWord;
+    if (useTodofuken) {
+        randomWord = todofukenWords[Math.floor(Math.random() * todofukenWords.length)];
+    } else {
+        randomWord = elapsedTime > 20 && Math.random() < 0.3 
                      ? advancedWords[Math.floor(Math.random() * advancedWords.length)]
                      : words[Math.floor(Math.random() * words.length)];
+    }
 
     balloon.textContent = randomWord;
 
@@ -121,11 +147,13 @@ function moveBalloons() {
         balloon.y += balloonSpeed;
         balloon.element.style.top = balloon.y + 'px';
         if (balloon.y > 550) {
-            balloon.element.remove();
             activeBalloons.splice(index, 1);
+            balloon.element.remove();
             lives--;
             document.getElementById('lives').textContent = lives;
-            if (lives === 0) alert('ゲームオーバー！');
+            if (lives === 0) {
+                endGame();
+            }
         }
     });
 }
@@ -145,8 +173,8 @@ document.addEventListener('keydown', (event) => {
     let typedChar = event.key.toLowerCase();
 
     activeBalloons.forEach((balloon, index) => {
-        if (romajiMap[balloon.text]) {
-            let possibleRomaji = romajiMap[balloon.text];
+        let possibleRomaji = romajiMap[balloon.text] || todofukenRomajiMap[balloon.text];
+        if (possibleRomaji) {
 
             if (balloon.typed === undefined) {
                 balloon.typed = ''; // Initialize tracking of typed input for this balloon
@@ -175,9 +203,21 @@ document.addEventListener('keydown', (event) => {
     });
 });
 
-function togglePause() {
-    paused = !paused;
-    document.getElementById('stop-button').textContent = paused ? '再開' : '一時停止';
+function startTodofukenGame() {
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('game-screen').style.display = 'block';
+    restartGame();
+    elapsedTime = 0;
+    timerElement.textContent = elapsedTime;
+    useTodofuken = true;
+}
+
+function startGameFromButton() {
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('game-screen').style.display = 'block';
+    restartGame();
+    elapsedTime = 0; // Reset timer to zero
+    timerElement.textContent = elapsedTime; // Display updated time
 }
 
 function restartGame() {
@@ -187,12 +227,30 @@ function restartGame() {
     activeBalloons = [];
     currentInput = '';
     paused = false; // Reset pause state
+    elapsedTime = 0; // Reset timer to zero
     document.getElementById('score').textContent = score;
     document.getElementById('lives').textContent = lives;
-    document.getElementById('stop-button').textContent = '一時停止'; // Reset button text
     startTimer(); // Restart the timer
+    timerElement.textContent = elapsedTime; // Display updated time
+}
+
+function goToStartScreen() {
+    document.getElementById('game-screen').style.display = 'none';
+    document.getElementById('start-screen').style.display = 'block';
+    score = 0;
+    lives = 3;
+    document.getElementById('score').textContent = score;
+    document.getElementById('lives').textContent = lives;
+    clearInterval(timerInterval);
+    elapsedTime = 0;
+    timerElement.textContent = elapsedTime;
+    activeBalloons.forEach(balloon => balloon.element.remove());
+    activeBalloons = [];
 }
 
 window.onload = () => {
-    startTimer();
+    document.getElementById('start-screen').style.display = 'block';
+    document.getElementById('game-screen').style.display = 'none';
+    document.getElementById('start-button').addEventListener('click', startGameFromButton);
+    document.getElementById('todofuken-button').addEventListener('click', startTodofukenGame);
 };
