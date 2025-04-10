@@ -58,3 +58,8 @@ button:disabled {
     cursor: not-allowed;
     box-shadow: none;
 }
+
+#start-button {
+    content: "プレイ（オリジナル）";
+}
+
