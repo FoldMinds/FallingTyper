@@ -7,15 +7,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>フォーリングタイパー</h1>
-    <p>文字が落ちる前に文字を入力して、スコアを伸ばそう！</p>
-    <div id="game-container"></div>
-    <p>スコア: <span id="score">0</span></p>
-    <p>残りのライフ: <span id="lives">3</span></p>
-    <p>時間: <span id="timer">60</span>秒</p>
-    <button onclick="restartGame()">リスタート</button>
-    <button id="stop-button" onclick="togglePause()">一時停止</button>
-    <script src="script.js"></script>
-</body>
+    <div id="start-screen">
+        <h2>フォーリングタイパーへようこそ！</h2>
+        <button id="start-button">Romaji🔰</button>
+        <button id="todofuken-button">都道府県 ver</button>
+    </div>
+    <div id="game-screen" style="display:none;">
+        <h1>フォーリングタイパー</h1>
+        <p>文字が落ちる前に文字を入力して、スコアを伸ばそう！</p>
+        <div id="game-container"></div>
+        <p>スコア: <span id="score">0</span></p>
+        <p>残りのライフ: <span id="lives">3</span></p>
+        <p>時間: <span id="timer">60</span>秒</p>
+        <button onclick="restartGame()">リスタート</button>
+        <button onclick="goToStartScreen()">スタート画面に戻る</button>
+    </div>
     <p>by FoldMinds</p>
+    <script src="script.js"></script>
+    <script>
+        function goToStartScreen() {
+            document.getElementById('game-screen').style.display = 'none';
+            document.getElementById('start-screen').style.display = 'block';
+        }
+    </script>
+</body>
 </html>
