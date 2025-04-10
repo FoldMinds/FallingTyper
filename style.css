@@ -6,7 +6,7 @@ body {
 
 #game-container {
     position: relative;
-    width: 800px;
+    width: 900px;
     height: 600px;
     margin: auto;
     border: 2px solid black;
@@ -19,7 +19,6 @@ body {
     font-size: 44px;
     color: red;
 }
-
 
 button {
     background-color: #4CAF50;
@@ -59,7 +58,36 @@ button:disabled {
     box-shadow: none;
 }
 
+#progress-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 220px;
+    background-color: #ffffffcc;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    padding: 10px;
+}
+
+#progress-bar {
+    height: 18px;
+    width: 0%;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    border-radius: 10px;
+    transition: width 0.4s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+#level-text {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
 #start-button {
     content: "プレイ（オリジナル）";
 }
-
