@@ -309,3 +309,5 @@ window.onload = () => {
     document.getElementById('start-button').addEventListener('click', startGameFromButton);
     document.getElementById('todofuken-button').addEventListener('click', startTodofukenGame);
 };
+
+/* Edu Version 0.1 */
