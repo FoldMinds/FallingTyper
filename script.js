@@ -222,6 +222,7 @@ document.addEventListener('keydown', (event) => {
                     score++;
                     completedWords.add(balloon.text);
                     document.getElementById('score').textContent = score;
+                    updateProgress();
                 }
             } else {
                 balloon.typed = ''; // Reset input if incorrect
@@ -263,6 +264,7 @@ function restartGame() {
     wordStage = 'basic';
     document.getElementById('score').textContent = score;
     document.getElementById('lives').textContent = lives;
+    updateProgress(); // Reset progress
     startTimer(); // Restart the timer
     timerElement.textContent = elapsedTime; // Display updated time
 }
@@ -279,6 +281,26 @@ function goToStartScreen() {
     timerElement.textContent = elapsedTime;
     activeBalloons.forEach(balloon => balloon.element.remove());
     activeBalloons = [];
+}
+
+function updateProgress() {
+    let total = currentWordList.length;
+    let completed = completedWords.size;
+    let percent = (completed / total) * 100;
+    document.getElementById('progress-bar').style.width = percent + '%';
+
+    let levelText = '';
+    if (wordStage === 'basic') {
+        levelText = 'Level 1: あいうえお';
+    } else if (wordStage === 'second') {
+        levelText = 'Level 2';
+    } else if (wordStage === 'advanced') {
+        levelText = 'Level 3';
+    } else if (wordStage === 'done' || wordStage === 'todofuken') {
+        levelText = 'All Completed!';
+    }
+
+    document.getElementById('level-text').textContent = levelText;
 }
 
 window.onload = () => {
