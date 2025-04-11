@@ -98,8 +98,11 @@ function startTimer() {
 }
 
 function endGame() {
-    alert("ゲーム終了！スコア: " + score + "もう一度挑戦してこのスコアを追い抜こう");
-    restartGame();
+    document.getElementById('gameover-score').textContent = score;
+    document.getElementById('gameover-time').textContent = elapsedTime;
+    document.getElementById('gameover-popup').style.display = 'flex';
+    paused = true;
+    playgameoverSound();
 }
 
 function createBalloon() {
@@ -112,7 +115,7 @@ function createBalloon() {
     if (useTodofuken) {
         let availableWords = todofukenWords.filter(word => !completedWords.has(word));
         if (availableWords.length === 0) {
-            alert("都道府県モードをクリアしました！おめでとう！");
+            showCompletionPopup();
             paused = true;
             return;
         }
@@ -129,8 +132,8 @@ function createBalloon() {
                 wordStage = 'advanced';
                 completedWords.clear();
             } else if (wordStage === 'advanced') {
+                showCompletionPopup();
                 wordStage = 'done';
-                alert("すべての単語を完成しました！おめでとう！次のステージへ。　〜　都道府県ステージ　又は　上級・中級ステージ");
                 paused = true;
                 return;
             }
@@ -196,6 +199,8 @@ setInterval(() => {
 document.addEventListener('keydown', (event) => {
     if (lives <= 0 || paused) return;
 
+    // playKeySound();
+
     let typedChar = event.key.toLowerCase();
 
     activeBalloons.forEach((balloon, index) => {
@@ -223,6 +228,7 @@ document.addEventListener('keydown', (event) => {
                     completedWords.add(balloon.text);
                     document.getElementById('score').textContent = score;
                     updateProgress();
+                    playSliceSound();
                 }
             } else {
                 balloon.typed = ''; // Reset input if incorrect
@@ -241,6 +247,7 @@ function startTodofukenGame() {
     elapsedTime = 0;
     timerElement.textContent = elapsedTime;
     useTodofuken = true;
+    playRandomBGM();
 }
 
 function startGameFromButton() {
@@ -249,6 +256,7 @@ function startGameFromButton() {
     restartGame();
     elapsedTime = 0; // Reset timer to zero
     timerElement.textContent = elapsedTime; // Display updated time
+    playRandomBGM();
 }
 
 function restartGame() {
@@ -259,6 +267,8 @@ function restartGame() {
     currentInput = '';
     paused = false; // Reset pause state
     elapsedTime = 0; // Reset timer to zero
+    balloonSpeed = 2;
+    balloonSpawnInterval = 2000;
     completedWords.clear();
     currentWordList = [...basicWords];
     wordStage = 'basic';
@@ -303,6 +313,19 @@ function updateProgress() {
     document.getElementById('level-text').textContent = levelText;
 }
 
+function showCompletionPopup() {
+    playWinSound();
+    document.getElementById('completion-popup').style.display = 'flex';
+}
+
+function closePopup() {
+    document.getElementById('completion-popup').style.display = 'none';
+}
+
+function closeGameOverPopup() {
+    document.getElementById('gameover-popup').style.display = 'none';
+}
+
 window.onload = () => {
     document.getElementById('start-screen').style.display = 'block';
     document.getElementById('game-screen').style.display = 'none';
@@ -310,4 +333,4 @@ window.onload = () => {
     document.getElementById('todofuken-button').addEventListener('click', startTodofukenGame);
 };
 
-/* Edu Version 0.1 */
+/* Edu Version 0.2 */
