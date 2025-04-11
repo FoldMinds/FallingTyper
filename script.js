@@ -29,7 +29,7 @@ const romajiMap = {
     'ま': ['ma'], 'み': ['mi'], 'む': ['mu'], 'め': ['me'], 'も': ['mo'],
     'や': ['ya'], 'ゆ': ['yu'], 'よ': ['yo'],
     'ら': ['ra'], 'り': ['ri'], 'る': ['ru'], 'れ': ['re'], 'ろ': ['ro'],
-    'わ': ['wa'], 'を': ['wo'], 'ん': ['n'],
+    'わ': ['wa'], 'を': ['wo'], 'ん': ['nn'],
     'ア': ['a'], 'イ': ['i'], 'ウ': ['u'], 'エ': ['e'], 'オ': ['o'],
     'カ': ['ka'], 'キ': ['ki'], 'ク': ['ku'], 'ケ': ['ke'], 'コ': ['ko'],
     'サ': ['sa'], 'シ': ['shi', 'si'], 'ス': ['su'], 'セ': ['se'], 'ソ': ['so'],
@@ -39,7 +39,7 @@ const romajiMap = {
     'マ': ['ma'], 'ミ': ['mi'], 'ム': ['mu'], 'メ': ['me'], 'モ': ['mo'],
     'ヤ': ['ya'], 'ユ': ['yu'], 'ヨ': ['yo'],
     'ラ': ['ra'], 'リ': ['ri'], 'ル': ['ru'], 'レ': ['re'], 'ロ': ['ro'],
-    'ワ': ['wa'], 'ヲ': ['wo'], 'ン': ['n'],
+    'ワ': ['wa'], 'ヲ': ['wo'], 'ン': ['nn'],
     'が': ['ga'], 'ぎ': ['gi'], 'ぐ': ['gu'], 'げ': ['ge'], 'ご': ['go'],
     'ざ': ['za'], 'じ': ['ji', 'zi'], 'ず': ['zu'], 'ぜ': ['ze'], 'ぞ': ['zo'],
     'だ': ['da'], 'ぢ': ['ji', 'di'], 'づ': ['zu', 'du'], 'で': ['de'], 'ど': ['do'],
@@ -327,11 +327,22 @@ function closeGameOverPopup() {
     document.getElementById('gameover-popup').style.display = 'none';
 }
 
+function openInfoPopup() {
+    document.getElementById('info-popup').style.display = 'flex';
+}
+
+function closeInfoPopup() {
+    document.getElementById('info-popup').style.display = 'none';
+}
+
 window.onload = () => {
     document.getElementById('start-screen').style.display = 'block';
     document.getElementById('game-screen').style.display = 'none';
-    document.getElementById('start-button').addEventListener('click', startGameFromButton);
-    document.getElementById('todofuken-button').addEventListener('click', startTodofukenGame);
 };
 
-/* Version 0.2.1 */
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('start-button').addEventListener('click', startGameFromButton);
+    document.getElementById('todofuken-button').addEventListener('click', startTodofukenGame);
+});
+
+/* Edu Version 0.3 */
