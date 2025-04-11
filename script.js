@@ -144,22 +144,23 @@ function createBalloon() {
 
     balloon.textContent = randomWord;
 
-    let balloonLeftPosition = Math.random() * 360;  // Random horizontal position for the balloon
+    let containerWidth = document.getElementById('game-container').offsetWidth;
+    let balloonLeftPosition = Math.random() * (containerWidth - 60); // 60 is approx balloon width
 
     // Check if the new balloon's position overlaps with any existing balloons
     let isColliding = false;
     activeBalloons.forEach((balloonInArray) => {
-        if (Math.abs(balloonLeftPosition - parseFloat(balloonInArray.element.style.left)) < 60) {  // 60px threshold for collision detection
+        if (Math.abs(balloonLeftPosition - balloonInArray.element.offsetLeft) < 60) {  // 60px threshold for collision detection
             isColliding = true;
         }
     });
 
     // If collision detected, generate a new position until it's non-colliding
     while (isColliding) {
-        balloonLeftPosition = Math.random() * 360;
+        balloonLeftPosition = Math.random() * (containerWidth - 60);
         isColliding = false;
         activeBalloons.forEach((balloonInArray) => {
-            if (Math.abs(balloonLeftPosition - parseFloat(balloonInArray.element.style.left)) < 60) {
+            if (Math.abs(balloonLeftPosition - balloonInArray.element.offsetLeft) < 60) {
                 isColliding = true;
             }
         });
@@ -333,4 +334,4 @@ window.onload = () => {
     document.getElementById('todofuken-button').addEventListener('click', startTodofukenGame);
 };
 
-/* Edu Version 0.2 */
+/* Version 0.2.1 */
