@@ -9,6 +9,14 @@
 <body>
     <div id="start-screen">
         <h2>フォーリングタイパーへようこそ！</h2>
+        <div class="info-panel">
+            <h3>🕒 プレイ時間</h3>
+            <p>約 2〜3 分程度</p>
+            <h3>🔥 難易度</h3>
+            <p>レベルアップにつれてスピードが上がります</p>
+            <h3>🎯 目的</h3>
+            <p>すべての文字を正しくタイピングしてクリア！</p>
+        </div>
         <button id="start-button">スタート</button>
 <!--         <button id="todofuken-button">都道府県 ver</button> -->
     </div>
@@ -54,10 +62,15 @@
     <p>by FoldMinds</p>
     <script src="script.js"></script>
     <script>
-        function goToStartScreen() {
-            document.getElementById('game-screen').style.display = 'none';
+        window.onload = () => {
             document.getElementById('start-screen').style.display = 'block';
-        }
+            document.getElementById('game-screen').style.display = 'none';
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('start-button').addEventListener('click', startGameFromButton);
+            document.getElementById('todofuken-button').addEventListener('click', startTodofukenGame);
+        });
 
         const buttonClickSound = new Audio('sounds/buttonclick.mov');
         const winSound = new Audio('sounds/wineffect.mp3');
@@ -124,4 +137,4 @@
 </body>
 </html>
 
-<!-- Edu Version 0.2.1.1 -->
+<!-- Edu Version 0.3 -->
