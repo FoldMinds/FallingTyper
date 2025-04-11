@@ -107,4 +107,82 @@ button:disabled {
     margin: 4px 0;
 }
 
-/* Edu Version 0.1 */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.popup-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 90%;
+}
+
+.popup-content h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.popup-content p {
+    margin: 20px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.popup-content button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.popup-content button:hover {
+    background-color: #0056b3;
+}
+
+#completion-popup .popup-content {
+    content: "<h2>🎉 完了！</h2><p>おめでとうございます！すべての単語をマスターしました！</p><p>スコア: <span id='final-score'>0</span></p><p>時間: <span id='final-time'>0</span>秒</p><p>残りのライフ: <span id='final-lives'>0</span></p><button onclick='restartGame(); closePopup();'>もう一度プレイ</button><button onclick='goToStartScreen(); closePopup();'>スタート画面に戻る</button>";
+}
+
+#gameover-popup {
+    display: none;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.popup-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 90%;
+}
+
+/* Edu Version 0.2 */
