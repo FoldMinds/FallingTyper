@@ -9,7 +9,7 @@
 <body>
     <div id="start-screen">
         <h2>フォーリングタイパーへようこそ！</h2>
-        <button id="start-button">Romaji🔰</button>
+        <button id="start-button">スタート</button>
 <!--         <button id="todofuken-button">都道府県 ver</button> -->
     </div>
     <div id="game-screen" style="display:none;">
@@ -31,6 +31,26 @@
         <button onclick="restartGame()">リスタート</button>
         <button onclick="goToStartScreen()">スタート画面に戻る</button>
     </div>
+    <div id="completion-popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <h2>🎉 完了！</h2>
+            <p>おめでとうございます！すべての単語をマスターしました！</p>
+            <!-- <p>スコア: <span id="final-score">0</span></p>
+            <p>時間: <span id="final-time">0</span>秒</p>
+            <p>残りのライフ: <span id="final-lives">0</span></p> -->
+            <button onclick="restartGame(); closePopup();">もう一度プレイ</button>
+            <button onclick="goToStartScreen(); closePopup();">スタート画面に戻る</button>
+        </div>
+    </div>
+    <div id="gameover-popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">
+            <h2>💀 ゲームオーバー</h2>
+            <p>スコア: <span id="gameover-score">0</span></p>
+            <p>時間: <span id="gameover-time">0</span>秒</p>
+            <button onclick="restartGame(); closeGameOverPopup();">もう一度プレイ</button>
+            <button onclick="goToStartScreen(); closeGameOverPopup();">スタート画面に戻る</button>
+        </div>
+    </div>
     <p>by FoldMinds</p>
     <script src="script.js"></script>
     <script>
@@ -38,8 +58,70 @@
             document.getElementById('game-screen').style.display = 'none';
             document.getElementById('start-screen').style.display = 'block';
         }
+
+        const buttonClickSound = new Audio('sounds/buttonclick.mov');
+        const winSound = new Audio('sounds/wineffect.mp3');
+        const gameoverSound = new Audio('sounds/gameover.mp3');
+        const sliceSound = new Audio('sounds/pop.mov');
+        // const keySounds = [
+        //     new Audio('sounds/key1.mov'),
+        //     new Audio('sounds/key2.mov'),
+        //     new Audio('sounds/key3.mov')
+        // ];
+        const bgmTracks = [
+            new Audio('sounds/bgmusic1.mp3'),
+            new Audio('sounds/bgmusic2.mp3'),
+            new Audio('sounds/bgmusic3.mp3'),
+            new Audio('sounds/bgmusic4.mp3'),
+            new Audio('sounds/bgmusic5.mp3')
+        ];
+
+        let bgm;
+
+        function playRandomBGM() {
+            if (bgm) {
+                bgm.pause();
+            }
+            bgm = bgmTracks[Math.floor(Math.random() * bgmTracks.length)];
+            bgm.loop = true;
+            bgm.volume = 0.4;
+            bgm.play();
+        }
+
+        function playKeySound() {
+            const sound = keySounds[Math.floor(Math.random() * keySounds.length)];
+            sound.currentTime = 0;
+            sound.play();
+        }
+
+        function playButtonClick() {
+            buttonClickSound.currentTime = 0;
+            buttonClickSound.play();
+        }
+
+        function playSliceSound() {
+            sliceSound.currentTime = 0;
+            sliceSound.play();
+        }
+
+        function playWinSound() {
+            winSound.currentTime = 0;
+            winSound.play();
+        }
+
+        function playgameoverSound() {
+            gameoverSound.currentTime = 0;
+            gameoverSound.play();
+        }
+
+        // Add click sounds to all buttons
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('click', playButtonClick);
+            });
+        });
     </script>
 </body>
 </html>
 
-<!-- Edu Version 0.1 -->
+<!-- Edu Version 0.2 -->
