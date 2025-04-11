@@ -185,4 +185,41 @@ button:disabled {
     max-width: 90%;
 }
 
-/* Edu Version 0.2 */
+#info-popup {
+    display: none;
+}
+
+#info-popup .popup-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    max-width: 90%;
+}
+
+.info-panel {
+    max-width: 300px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #ffffffdd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+}
+
+.info-panel h3 {
+    margin-top: 1em;
+    margin-bottom: 0.3em;
+    font-size: 18px;
+    color: #222;
+}
+
+.info-panel p {
+    margin: 0 0 1em;
+    line-height: 1.5;
+}
+
+/* Edu Version 0.3 */
